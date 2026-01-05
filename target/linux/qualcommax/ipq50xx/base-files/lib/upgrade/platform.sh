@@ -1,3 +1,5 @@
+. /lib/functions/bootconfig.sh
+
 PART_NAME=firmware
 REQUIRE_IMAGE_METADATA=1
 
@@ -66,6 +68,11 @@ platform_do_upgrade() {
 	linksys,spnmx56)
 		linksys_mx_pre_upgrade "$1"
 		remove_oem_ubi_volume squashfs
+		nand_do_upgrade "$1"
+		;;
+	linksys,mx6200)
+		linksys_bootconfig_pre_upgrade "$1"
+		remove_oem_ubi_volume ubi_rootfs
 		nand_do_upgrade "$1"
 		;;
 	xiaomi,ax6000)
