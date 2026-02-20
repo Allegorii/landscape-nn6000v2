@@ -45,7 +45,7 @@
  	pn = ppp_pernet(pch->chan_net);
  
  	mutex_lock(&pn->all_ppp_mutex);
-@@ -3532,13 +3555,40 @@ ppp_connect_channel(struct channel *pch,
+@@ -3532,6 +3555,26 @@ ppp_connect_channel(struct channel *pch,
  	++ppp->n_channels;
  	rcu_assign_pointer(pch->ppp, ppp);
  	refcount_inc(&ppp->file.refcnt);
@@ -71,8 +71,8 @@
 + out2:
  	ppp_unlock(ppp);
  	ret = 0;
--
-  outl:
+ 
+@@ -3539,6 +3582,14 @@ ppp_connect_channel(struct channel *pch,
  	spin_unlock(&pch->upl);
   out:
  	mutex_unlock(&pn->all_ppp_mutex);
@@ -87,7 +87,7 @@
  	return ret;
  }
  
-@@ -3555,6 +3605,13 @@ ppp_disconnect_channel(struct channel *p
+@@ -3555,6 +3606,13 @@ ppp_disconnect_channel(struct channel *p
  	ppp = rcu_replace_pointer(pch->ppp, NULL, lockdep_is_held(&pch->upl));
  	spin_unlock(&pch->upl);
  	if (ppp) {
@@ -101,7 +101,7 @@
  		/* remove it from the ppp unit's list */
  		ppp_lock(ppp);
  		list_del_rcu(&pch->clist);
-@@ -3635,6 +3692,222 @@ static void *unit_find(struct idr *p, in
+@@ -3635,6 +3693,227 @@ static void *unit_find(struct idr *p, in
  	return idr_find(p, n);
  }
  
@@ -113,6 +113,7 @@
 +		      unsigned long tx_dropped)
 +{
 +	struct ppp *ppp;
++	struct pcpu_sw_netstats *tstats;
 +
 +	if (!dev)
 +		return;
@@ -122,9 +123,15 @@
 +
 +	ppp = netdev_priv(dev);
 +
++	tstats = this_cpu_ptr(dev->tstats);
++	u64_stats_update_begin(&tstats->syncp);
++	u64_stats_add(&tstats->tx_bytes, tx_bytes);
++	u64_stats_add(&tstats->tx_packets, tx_packets);
++	u64_stats_add(&tstats->rx_bytes, rx_bytes);
++	u64_stats_add(&tstats->rx_packets, rx_packets);
++	u64_stats_update_end(&tstats->syncp);
++
 +	ppp_xmit_lock(ppp);
-+	ppp->stats64.tx_packets += tx_packets;
-+	ppp->stats64.tx_bytes += tx_bytes;
 +	ppp->dev->stats.tx_errors += tx_errors;
 +	ppp->dev->stats.tx_dropped += tx_dropped;
 +	if (tx_packets)
@@ -132,8 +139,6 @@
 +	ppp_xmit_unlock(ppp);
 +
 +	ppp_recv_lock(ppp);
-+	ppp->stats64.rx_packets += rx_packets;
-+	ppp->stats64.rx_bytes += rx_bytes;
 +	ppp->dev->stats.rx_errors += rx_errors;
 +	ppp->dev->stats.rx_dropped += rx_dropped;
 +	if (rx_packets)
@@ -324,7 +329,7 @@
  /* Module/initialization stuff */
  
  module_init(ppp_init);
-@@ -3651,6 +3924,7 @@ EXPORT_SYMBOL(ppp_input_error);
+@@ -3651,6 +3930,7 @@ EXPORT_SYMBOL(ppp_input_error);
  EXPORT_SYMBOL(ppp_output_wakeup);
  EXPORT_SYMBOL(ppp_register_compressor);
  EXPORT_SYMBOL(ppp_unregister_compressor);
@@ -477,7 +482,7 @@
  
  struct net_device_path;
  struct net_device_path_ctx;
-@@ -30,9 +34,19 @@ struct ppp_channel_ops {
+@@ -30,6 +34,16 @@ struct ppp_channel_ops {
  	int	(*start_xmit)(struct ppp_channel *, struct sk_buff *);
  	/* Handle an ioctl call that has come in via /dev/ppp. */
  	int	(*ioctl)(struct ppp_channel *, unsigned int, unsigned long);
@@ -492,14 +497,9 @@
 +	/* Release hold on the channel */
 +	void (*release)(struct ppp_channel *);
  	int	(*fill_forward_path)(struct net_device_path_ctx *,
--				     struct net_device_path *,
--				     const struct ppp_channel *);
-+				struct net_device_path *,
-+				const struct ppp_channel *);
- };
- 
- struct ppp_channel {
-@@ -75,6 +89,51 @@ extern int ppp_unit_number(struct ppp_ch
+ 				     struct net_device_path *,
+ 				     const struct ppp_channel *);
+@@ -75,6 +89,50 @@ extern int ppp_unit_number(struct ppp_ch
  /* Get the device name associated with a channel, or NULL if none */
  extern char *ppp_dev_name(struct ppp_channel *);
  
@@ -546,7 +546,6 @@
 +			     unsigned long tx_bytes, unsigned long rx_errors,
 +			     unsigned long tx_errors, unsigned long rx_dropped,
 +			     unsigned long tx_dropped);
-+
 +
  /*
   * SMP locking notes:
