@@ -353,6 +353,26 @@ TARGET_DEVICES += link_nn6000-v1
 define Device/link_nn6000-v2
 	$(Device/link_nn6000-v1)
 	DEVICE_MODEL := NN6000 v2
+	KERNEL_SIZE := 8192k
+	# Landscape eBPF base image: keep iproute2 full + Docker runtime,
+	# drop OpenWrt default network manager / NSS acceleration / tunnel extras.
+	DEVICE_PACKAGES += ip-full docker dockerd containerd runc tini
+	DEVICE_PACKAGES += -netifd
+	DEVICE_PACKAGES += -nss-firmware -nss-firmware-ipq60xx -nss-eip-firmware
+	DEVICE_PACKAGES += -kmod-qca-nss-crypto -kmod-qca-nss-dp -kmod-qca-nss-drv -kmod-qca-nss-ecm
+	DEVICE_PACKAGES += -kmod-qca-nss-drv-bridge-mgr -kmod-qca-nss-drv-eogremgr -kmod-qca-nss-drv-gre
+	DEVICE_PACKAGES += -kmod-qca-nss-drv-igs -kmod-qca-nss-drv-l2tpv2 -kmod-qca-nss-drv-lag-mgr
+	DEVICE_PACKAGES += -kmod-qca-nss-drv-map-t -kmod-qca-nss-drv-match -kmod-qca-nss-drv-mirror
+	DEVICE_PACKAGES += -kmod-qca-nss-drv-pppoe -kmod-qca-nss-drv-pptp -kmod-qca-nss-drv-qdisc
+	DEVICE_PACKAGES += -kmod-qca-nss-drv-tun6rd -kmod-qca-nss-drv-tunipip6 -kmod-qca-nss-drv-vlan-mgr
+	DEVICE_PACKAGES += -kmod-qca-nss-drv-vxlanmgr -kmod-qca-nss-drv-wifi-meshmgr
+	DEVICE_PACKAGES += -6rd -kmod-gre -kmod-gre6 -kmod-iptunnel -kmod-iptunnel4 -kmod-iptunnel6
+	DEVICE_PACKAGES += -kmod-ip6-tunnel -kmod-sit -kmod-vxlan -kmod-nat46 -kmod-pptp -kmod-l2tp -kmod-pppol2tp
+	DEVICE_PACKAGES += -luci -luci-light -luci-base -luci-mod-admin-full -luci-mod-network -luci-mod-status -luci-mod-system
+	DEVICE_PACKAGES += -luci-app-firewall -luci-app-package-manager -luci-i18n-base-zh-cn -luci-i18n-firewall-zh-cn
+	DEVICE_PACKAGES += -luci-i18n-package-manager-zh-cn -luci-theme-bootstrap -luci-proto-ipv6 -luci-proto-ppp
+	DEVICE_PACKAGES += -uhttpd -uhttpd-mod-ubus -rpcd-mod-luci -dnsmasq-full -odhcp6c -odhcpd-ipv6only
+	DEVICE_PACKAGES += -mt7981-wo-firmware
 endef
 TARGET_DEVICES += link_nn6000-v2
 

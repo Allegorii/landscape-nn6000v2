@@ -16,3 +16,71 @@ CONFIG_KERNEL_DEBUG_INFO_BTF=y
 CONFIG_KERNEL_DEBUG_INFO_BTF_MODULES=y
 CONFIG_KERNEL_MODULE_ALLOW_BTF_MISMATCH=y
 CONFIG_KERNEL_PROBE_EVENTS_BTF_ARGS=y
+# CONFIG_KERNEL_NF_CONNTRACK_DSCPREMARK_EXT is not set
+
+CONFIG_DEVEL=y
+CONFIG_TOOLCHAINOPTS=y
+CONFIG_TARGET_PER_DEVICE_ROOTFS=y
+CONFIG_LIBC_USE_GLIBC=y
+# CONFIG_LIBC_USE_MUSL is not set
+CONFIG_USE_GLIBC=y
+# CONFIG_USE_MUSL is not set
+CONFIG_LIBC="glibc"
+
+CONFIG_PACKAGE_ip-full=y
+CONFIG_PACKAGE_docker=y
+CONFIG_PACKAGE_dockerd=y
+CONFIG_PACKAGE_containerd=y
+CONFIG_PACKAGE_runc=y
+CONFIG_PACKAGE_tini=y
+
+# CONFIG_ATH11K_NSS_SUPPORT is not set
+# CONFIG_PACKAGE_MAC80211_NSS_SUPPORT is not set
+
+# CONFIG_PACKAGE_netifd is not set
+# CONFIG_PACKAGE_nss-firmware is not set
+# CONFIG_PACKAGE_nss-firmware-ipq60xx is not set
+# CONFIG_PACKAGE_nss-eip-firmware is not set
+# CONFIG_PACKAGE_kmod-qca-nss-crypto is not set
+# CONFIG_PACKAGE_kmod-qca-nss-dp is not set
+# CONFIG_PACKAGE_kmod-qca-nss-drv is not set
+# CONFIG_PACKAGE_kmod-qca-nss-ecm is not set
+
+# CONFIG_PACKAGE_6rd is not set
+# CONFIG_PACKAGE_kmod-gre is not set
+# CONFIG_PACKAGE_kmod-gre6 is not set
+# CONFIG_PACKAGE_kmod-iptunnel is not set
+# CONFIG_PACKAGE_kmod-iptunnel4 is not set
+# CONFIG_PACKAGE_kmod-iptunnel6 is not set
+# CONFIG_PACKAGE_kmod-ip6-tunnel is not set
+# CONFIG_PACKAGE_kmod-sit is not set
+# CONFIG_PACKAGE_kmod-vxlan is not set
+# CONFIG_PACKAGE_kmod-nat46 is not set
+# CONFIG_PACKAGE_kmod-pptp is not set
+# CONFIG_PACKAGE_kmod-l2tp is not set
+# CONFIG_PACKAGE_kmod-pppol2tp is not set
+
+# CONFIG_PACKAGE_luci is not set
+# CONFIG_PACKAGE_luci-light is not set
+# CONFIG_PACKAGE_luci-base is not set
+# CONFIG_PACKAGE_luci-mod-admin-full is not set
+# CONFIG_PACKAGE_luci-mod-network is not set
+# CONFIG_PACKAGE_luci-mod-status is not set
+# CONFIG_PACKAGE_luci-mod-system is not set
+# CONFIG_PACKAGE_luci-app-firewall is not set
+# CONFIG_PACKAGE_luci-app-package-manager is not set
+# CONFIG_PACKAGE_luci-i18n-base-zh-cn is not set
+# CONFIG_PACKAGE_luci-i18n-firewall-zh-cn is not set
+# CONFIG_PACKAGE_luci-i18n-package-manager-zh-cn is not set
+# CONFIG_PACKAGE_luci-theme-bootstrap is not set
+# CONFIG_PACKAGE_luci-proto-ipv6 is not set
+# CONFIG_PACKAGE_luci-proto-ppp is not set
+# CONFIG_PACKAGE_default-settings is not set
+# CONFIG_PACKAGE_default-settings-chn is not set
+# CONFIG_PACKAGE_uhttpd is not set
+# CONFIG_PACKAGE_uhttpd-mod-ubus is not set
+# CONFIG_PACKAGE_rpcd-mod-luci is not set
+# CONFIG_PACKAGE_dnsmasq-full is not set
+# CONFIG_PACKAGE_odhcp6c is not set
+# CONFIG_PACKAGE_odhcpd-ipv6only is not set
+# CONFIG_PACKAGE_mt7981-wo-firmware is not set
