@@ -353,7 +353,6 @@ TARGET_DEVICES += link_nn6000-v1
 define Device/link_nn6000-v2
 	$(Device/link_nn6000-v1)
 	DEVICE_MODEL := NN6000 v2
-	KERNEL_SIZE := 8192k
 	# Landscape eBPF base image: keep iproute2 full + Docker runtime,
 	# drop OpenWrt default network manager / NSS acceleration / tunnel extras.
 	DEVICE_PACKAGES += -ipq-wifi-link_nn6000
