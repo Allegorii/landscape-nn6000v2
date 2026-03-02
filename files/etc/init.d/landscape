@@ -1,0 +1,25 @@
+#!/bin/sh /etc/rc.common
+
+USE_PROCD=1
+START=99
+STOP=10
+
+LAND_BIN=/usr/bin/landscape-webserver
+LAND_CONF=/root/.landscape-router
+LAND_WEB=${LAND_WEB:-$LAND_CONF/static}
+LAND_LOG=${LAND_LOG:-$LAND_CONF/logs}
+
+start_service() {
+	[ -x "$LAND_BIN" ] || return 1
+
+	mkdir -p "$LAND_CONF" "$LAND_WEB" "$LAND_LOG"
+
+	procd_open_instance
+	procd_set_param command "$LAND_BIN" --auto
+	procd_set_param env \
+		LANDSCAPE_CONF_PATH="$LAND_CONF" \
+		LANDSCAPE_WEB_ROOT="$LAND_WEB" \
+		LANDSCAPE_LOG_PATH="$LAND_LOG"
+	procd_set_param respawn
+	procd_close_instance
+}
