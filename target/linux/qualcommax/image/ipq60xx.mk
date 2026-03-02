@@ -357,7 +357,7 @@ define Device/link_nn6000-v2
 	# Landscape eBPF base image: keep iproute2 full + Docker runtime,
 	# drop OpenWrt default network manager / NSS acceleration / tunnel extras.
 	DEVICE_PACKAGES += -ipq-wifi-link_nn6000
-	DEVICE_PACKAGES += ip-full docker dockerd containerd runc tini
+	DEVICE_PACKAGES += ip-full docker dockerd containerd runc tini ppp ppp-mod-pppoe
 	DEVICE_PACKAGES += -netifd
 	DEVICE_PACKAGES += -nss-firmware -nss-firmware-ipq60xx -nss-eip-firmware
 	DEVICE_PACKAGES += -kmod-qca-nss-crypto -kmod-qca-nss-dp -kmod-qca-nss-drv -kmod-qca-nss-ecm
@@ -373,7 +373,7 @@ define Device/link_nn6000-v2
 	DEVICE_PACKAGES += -luci-app-firewall -luci-app-package-manager -luci-i18n-base-zh-cn -luci-i18n-firewall-zh-cn
 	DEVICE_PACKAGES += -luci-i18n-package-manager-zh-cn -luci-theme-bootstrap -luci-proto-ipv6 -luci-proto-ppp
 	DEVICE_PACKAGES += -uhttpd -uhttpd-mod-ubus -rpcd-mod-luci -dnsmasq-full -odhcp6c -odhcpd-ipv6only
-	DEVICE_PACKAGES += -firewall4 -nftables -kmod-nft-offload -ppp -ppp-mod-pppoe
+	DEVICE_PACKAGES += -firewall4 -nftables -kmod-nft-offload
 	DEVICE_PACKAGES += -mt7981-wo-firmware
 endef
 TARGET_DEVICES += link_nn6000-v2
