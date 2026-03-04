@@ -354,12 +354,15 @@ define Device/link_nn6000-v2
 	$(Device/link_nn6000-v1)
 	DEVICE_MODEL := NN6000 v2
 	# Landscape eBPF base image: keep iproute2 full + Docker runtime,
-	# drop OpenWrt default network manager / NSS acceleration / tunnel extras.
-	DEVICE_PACKAGES += -ipq-wifi-link_nn6000
+	# keep ath11k Wi-Fi stack + hostapd(wpad), drop default firewall / NSS extras.
+	DEVICE_PACKAGES += kmod-ath11k kmod-ath11k-ahb kmod-ath11k-pci kmod-cfg80211 kmod-mac80211
+	DEVICE_PACKAGES += ath11k-firmware-ipq6018 wireless-regdb hostapd-common wpad-openssl
 	DEVICE_PACKAGES += ip-full docker dockerd containerd runc tini ppp ppp-mod-pppoe
+	DEVICE_PACKAGES += kmod-qca-ssdk
+	DEVICE_PACKAGES += kmod-qca-nss-dp
 	DEVICE_PACKAGES += -netifd
 	DEVICE_PACKAGES += -nss-firmware -nss-firmware-ipq60xx -nss-eip-firmware
-	DEVICE_PACKAGES += -kmod-qca-nss-crypto -kmod-qca-nss-dp -kmod-qca-nss-drv -kmod-qca-nss-ecm
+	DEVICE_PACKAGES += -kmod-qca-nss-crypto -kmod-qca-nss-ecm
 	DEVICE_PACKAGES += -kmod-qca-nss-drv-bridge-mgr -kmod-qca-nss-drv-eogremgr -kmod-qca-nss-drv-gre
 	DEVICE_PACKAGES += -kmod-qca-nss-drv-igs -kmod-qca-nss-drv-l2tpv2 -kmod-qca-nss-drv-lag-mgr
 	DEVICE_PACKAGES += -kmod-qca-nss-drv-map-t -kmod-qca-nss-drv-match -kmod-qca-nss-drv-mirror
@@ -372,7 +375,8 @@ define Device/link_nn6000-v2
 	DEVICE_PACKAGES += -luci-app-firewall -luci-app-package-manager -luci-i18n-base-zh-cn -luci-i18n-firewall-zh-cn
 	DEVICE_PACKAGES += -luci-i18n-package-manager-zh-cn -luci-theme-bootstrap -luci-proto-ipv6 -luci-proto-ppp
 	DEVICE_PACKAGES += -uhttpd -uhttpd-mod-ubus -rpcd-mod-luci -dnsmasq-full -odhcp6c -odhcpd-ipv6only
-	DEVICE_PACKAGES += -firewall4 -nftables -kmod-nft-offload
+	DEVICE_PACKAGES += -firewall -firewall4 -nftables -kmod-nft-offload
+	DEVICE_PACKAGES += -kmod-ipt-fullconenat -iptables-mod-fullconenat -ip6tables-mod-fullconenat
 	DEVICE_PACKAGES += -mt7981-wo-firmware
 endef
 TARGET_DEVICES += link_nn6000-v2
